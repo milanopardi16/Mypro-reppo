@@ -1,0 +1,14 @@
+# Robots.txt - Capital Network Website
+User-agent: *
+Allow: /
+
+# Disallow sensitive paths
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /api/
+
+# Crawl delay
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: /sitemap.xml

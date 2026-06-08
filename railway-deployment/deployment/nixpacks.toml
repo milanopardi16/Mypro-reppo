@@ -1,0 +1,16 @@
+[project]
+root = "app"
+
+[phases.setup]
+packages = ["nodejs", "postgresql-client"]
+commands = ["echo 'Setting up Railway app workspace'"]
+
+[phases.build]
+commands = ["cd app && npm ci", "cd app && npm run build"]
+
+[phases.start]
+command = "bash ./scripts/start.sh"
+
+[env]
+PORT = "4001"
+NODE_ENV = "production"

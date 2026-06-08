@@ -1,0 +1,52 @@
+[
+  {
+    "id": "2a59c01c-036c-4e56-a8d1-f469a258b111",
+    "roomId": "room_9d8fb66b-37aa-4a3b-a950-018d429d6753",
+    "senderId": "9d8fb66b-37aa-4a3b-a950-018d429d6753",
+    "senderType": "user",
+    "message": "sghl",
+    "attachment": null,
+    "isRead": false,
+    "createdAt": "2026-06-02T18:55:17.351Z"
+  },
+  {
+    "id": "c6a662f9-cdd5-4044-845d-780fdc6d39d4",
+    "roomId": "room_9d8fb66b-37aa-4a3b-a950-018d429d6753",
+    "senderId": "admin",
+    "senderType": "admin",
+    "message": "ddd",
+    "attachment": null,
+    "isRead": true,
+    "createdAt": "2026-06-02T18:57:24.876Z"
+  },
+  {
+    "id": "82a8817e-9935-430f-a980-d8371aeaffc4",
+    "roomId": "room_9d8fb66b-37aa-4a3b-a950-018d429d6753",
+    "senderId": "9d8fb66b-37aa-4a3b-a950-018d429d6753",
+    "senderType": "user",
+    "message": "خوبین",
+    "attachment": null,
+    "isRead": false,
+    "createdAt": "2026-06-02T18:57:37.314Z"
+  },
+  {
+    "id": "4919ffbd-8ae8-4233-9a93-f892355f981a",
+    "roomId": "room_9d8fb66b-37aa-4a3b-a950-018d429d6753",
+    "senderId": "admin",
+    "senderType": "admin",
+    "message": "ممنونم",
+    "attachment": null,
+    "isRead": true,
+    "createdAt": "2026-06-02T18:57:47.568Z"
+  },
+  {
+    "id": "32c4641c-fd9a-4cdf-8a47-ff0e5e871ed7",
+    "roomId": "room_9d8fb66b-37aa-4a3b-a950-018d429d6753",
+    "senderId": "9d8fb66b-37aa-4a3b-a950-018d429d6753",
+    "senderType": "user",
+    "message": "❤️",
+    "attachment": null,
+    "isRead": false,
+    "createdAt": "2026-06-02T18:57:56.007Z"
+  }
+]

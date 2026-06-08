@@ -1,0 +1,15 @@
+module.exports = {
+  admin: require('./admin.repository'),
+  assessment: require('./assessment.repository'),
+  auditLog: require('./auditLog.repository'),
+  blog: require('./blog.repository'),
+  chat: require('./chat.repository'),
+  contactMessage: require('./contactMessage.repository'),
+  founder: require('./founder.repository'),
+  notification: require('./notification.repository'),
+  pushToken: require('./pushToken.repository'),
+  refreshToken: require('./refreshToken.repository'),
+  role: require('./role.repository'),
+  siteContent: require('./siteContent.repository'),
+  user: require('./user.repository'),
+}

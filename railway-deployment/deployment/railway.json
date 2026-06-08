@@ -1,0 +1,10 @@
+{
+  "project": "capital-network-railway",
+  "rootDirectory": "app",
+  "buildCommand": "bash ./scripts/build.sh",
+  "startCommand": "bash ./scripts/start.sh",
+  "environment": {
+    "NODE_ENV": "production",
+    "PORT": "4001"
+  }
+}

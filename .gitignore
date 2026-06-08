@@ -1,0 +1,59 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+# Ignore node_modules anywhere in the tree
+node_modules/
+/**/node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# build output
+/dist
+/build
+/.next
+/out
+
+# test & coverage
+/coverage
+
+# logs and runtime files
+/logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# temp/cache
+/tmp
+/.cache
+
+# env files — never commit secrets; examples are allowed
+.env
+.env.local
+.env.*
+!.env.example
+!.env.local.example
+
+# editor settings
+.DS_Store
+.vscode/settings.json
+
+# misc
+*.pem
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# local data store (do not commit runtime data)
+data/registrations.json
+
+# user uploads and runtime artifacts
+/uploads/*
+!/uploads/.gitkeep
