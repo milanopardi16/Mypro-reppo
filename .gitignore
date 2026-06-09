@@ -43,6 +43,7 @@ yarn-error.log*
 # editor settings
 .DS_Store
 .vscode/settings.json
+.vscodes/
 
 # misc
 *.pem
