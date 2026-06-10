@@ -9,6 +9,7 @@ RUN if [ -f package-lock.json ]; then npm ci --omit=dev --ignore-scripts; else n
 FROM node:22-bullseye-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
+COPY prisma ./prisma
 RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 COPY . .
 RUN npx prisma generate && npm run build
