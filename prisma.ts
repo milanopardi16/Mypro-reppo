@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
 
 declare global {
   // eslint-disable-next-line no-var
@@ -6,7 +7,7 @@ declare global {
 }
 
 const client = global.__prismaClient || new PrismaClient({
-  adapter: 'postgresql',
+  adapter: new PrismaPg(),
   log: process.env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],
 })
 

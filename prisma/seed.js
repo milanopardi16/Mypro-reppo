@@ -2,12 +2,13 @@ const fs = require('fs')
 const path = require('path')
 const bcrypt = require('bcryptjs')
 const { PrismaClient } = require('@prisma/client')
+const { PrismaPg } = require('@prisma/adapter-pg')
 
 require('dotenv').config({ path: path.join(process.cwd(), '.env.local') })
 require('dotenv').config({ path: path.join(process.cwd(), '.env') })
 
 const prisma = new PrismaClient({
-  adapter: 'postgresql',
+  adapter: new PrismaPg(),
 })
 const DATA_DIR = path.join(process.cwd(), 'data')
 

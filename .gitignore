@@ -1,7 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-# Ignore node_modules anywhere in the tree
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# DEPENDENCIES AND BUILD ARTIFACTS
+# ═══════════════════════════════════════════════════════════════════════════════════════
 node_modules/
 /**/node_modules/
 /.pnp
@@ -12,49 +13,135 @@ node_modules/
 !.yarn/releases
 !.yarn/versions
 
-# build output
+# Build output (dist, .next, etc.)
 /dist
 /build
 /.next
 /out
+*.tsbuildinfo
+next-env.d.ts
 
-# test & coverage
-/coverage
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# SECRETS AND ENVIRONMENT FILES (NEVER COMMIT)
+# ═══════════════════════════════════════════════════════════════════════════════════════
+.env
+.env.local
+.env.*.local
+.env*.local
+.env.production
+.env.staging
+!.env.example
+!.env.local.example
 
-# logs and runtime files
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# RUNTIME DATA (SESSION, TOKENS, REGISTRATIONS)
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# Data files containing runtime state should not be committed
+/data/*.json
+data/registrations.json
+data/admin-refresh-tokens.json
+data/admin-messages.json
+data/admin-notifications.json
+data/chat-messages.json
+data/chat-rooms.json
+data/evaluations.json
+data/admin-evaluations.json
+data/founder-submissions.json
+
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# USER UPLOADS AND FILE STORAGE
+# ═══════════════════════════════════════════════════════════════════════════════════════
+/uploads/*
+!/uploads/.gitkeep
+public/uploads/*
+!/public/uploads/.gitkeep
+
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# LOGS AND TEMPORARY FILES
+# ═══════════════════════════════════════════════════════════════════════════════════════
 /logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+lerna-debug.log*
 
-# temp/cache
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# CACHES AND TEMPORARY DIRECTORIES
+# ═══════════════════════════════════════════════════════════════════════════════════════
 /tmp
 /.cache
+.npm
+.eslintcache
+.stylelintcache
 
-# env files — never commit secrets; examples are allowed
-.env
-.env.local
-.env.*
-!.env.example
-!.env.local.example
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# DATABASE AND MIGRATION FILES
+# ═══════════════════════════════════════════════════════════════════════════════════════
+*.db
+*.sqlite
+*.sqlite3
+sqlite-wal
+sqlite-shm
 
-# editor settings
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# EDITOR AND IDE CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════════════
 .DS_Store
 .vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
 .vscodes/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# misc
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# SECURITY AND CRYPTO MATERIALS
+# ═══════════════════════════════════════════════════════════════════════════════════════
 *.pem
+*.key
+*.cert
+*.crt
+*.p8
+.ssh/
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# SYSTEM FILES
+# ═══════════════════════════════════════════════════════════════════════════════════════
+Thumbs.db
+.env.bak
+*.bak
+*.backup
+.yarn.lock
 
-# local data store (do not commit runtime data)
-data/registrations.json
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# CI/CD AND DEPLOYMENT
+# ═══════════════════════════════════════════════════════════════════════════════════════
+.github/workflows/secrets.yml
+.env.CI
+coverage/
+.nyc_output/
 
-# user uploads and runtime artifacts
-/uploads/*
-!/uploads/.gitkeep
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# OS AND CLOUD PROVIDER ARTIFACTS
+# ═══════════════════════════════════════════════════════════════════════════════════════
+.env.cloud
+.env.railway
+.env.vercel
+.env.netlify
+
+# ═══════════════════════════════════════════════════════════════════════════════════════
+# TESTING AND COVERAGE
+# ═══════════════════════════════════════════════════════════════════════════════════════
+/coverage
+/.nyc_output
+*.lcov

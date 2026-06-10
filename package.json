@@ -24,13 +24,15 @@
     "db:validate-seed": "node scripts/validate-seed-schema.mjs",
     "db:wait": "node scripts/wait-for-db.js",
     "release": "node scripts/release.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "predeploy": "node scripts/pre-deploy-check.js",
+    "deploy:production": "node scripts/deploy-production.js"
   },
-
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@supabase/supabase-js": "2.105.4",
     "@uiw/react-md-editor": "^4.1.1",
@@ -38,6 +40,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "express": "^4.21.2",
     "express-rate-limit": "^8.5.2",
     "firebase-admin": "^14.0.0",
@@ -52,7 +55,6 @@
     "react-router-dom": "^7.6.2",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
-    "exceljs": "^4.4.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
