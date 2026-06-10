@@ -4,6 +4,7 @@ const globalForPrisma = globalThis
 
 function createClient() {
   return new PrismaClient({
+    adapter: 'postgresql',
     log: process.env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
   })
 }

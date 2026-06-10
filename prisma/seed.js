@@ -6,7 +6,9 @@ const { PrismaClient } = require('@prisma/client')
 require('dotenv').config({ path: path.join(process.cwd(), '.env.local') })
 require('dotenv').config({ path: path.join(process.cwd(), '.env') })
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  adapter: 'postgresql',
+})
 const DATA_DIR = path.join(process.cwd(), 'data')
 
 const ROLES = [

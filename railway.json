@@ -1,0 +1,6 @@
+{
+  "rootDirectory": ".",
+  "buildCommand": "npm ci --include=dev && npm run build",
+  "startCommand": "npm run start:prod",
+  "healthCheckPath": "/health"
+}

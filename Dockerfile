@@ -1,22 +1,23 @@
 # syntax=docker/dockerfile:1
 
-FROM node:20-alpine AS deps
+FROM node:22-bullseye-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY prisma ./prisma
-RUN npm ci --omit=dev
+RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit=dev; fi
 
-FROM node:20-alpine AS build
+FROM node:22-bullseye-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
 COPY . .
 RUN npx prisma generate && npm run build
 
-FROM node:20-alpine AS runner
+FROM node:22-bullseye-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-RUN addgroup -S app && adduser -S app -G app
+ENV PORT=4001
+RUN addgroup --system app && adduser --system --ingroup app app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/dist ./dist
@@ -27,6 +28,5 @@ COPY public ./public
 RUN mkdir -p uploads && chown -R app:app /app
 USER app
 EXPOSE 4001
-HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
-  CMD node -e "fetch('http://127.0.0.1:4001/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
-CMD ["node", "server/api-server.js"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 CMD /bin/sh -c "node -e \"(async ()=>{try{const res=await fetch('http://127.0.0.1:'+ (process.env.PORT || 4001) + '/health');process.exit(res.ok?0:1)}catch(e){process.exit(1)}})()\""
+CMD ["node","server/api-server.js"]

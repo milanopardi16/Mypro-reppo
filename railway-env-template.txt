@@ -1,0 +1,174 @@
+# ═════════════════════════════════════════════════════════════════════════════════════
+# RAILWAY DEPLOYMENT ENVIRONMENT VARIABLES
+# ═════════════════════════════════════════════════════════════════════════════════════
+#
+# SECURITY GUIDELINES:
+# 1. NEVER commit this file with real secrets to version control.
+# 2. Set all values in Railway dashboard: Project → Variables → Add Variable.
+# 3. Use cryptographically secure secrets (minimum 32 characters for JWT/NEXTAUTH).
+# 4. Rotate secrets immediately after deployment and periodically thereafter.
+# 5. Monitor secret access and ensure proper access controls are in place.
+#
+# DEPLOYMENT STEPS:
+# 1. Ensure PostgreSQL database is provisioned on Railway.
+# 2. Get DATABASE_URL from Railway PostgreSQL service.
+# 3. Generate all secrets using: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+# 4. Add each variable in Railway dashboard one by one.
+# 5. Trigger deployment (Railway will automatically redeploy).
+# 6. Verify health check passes: /api/health
+#
+# ═════════════════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────────────
+# PRODUCTION RUNTIME (Railway automatically sets PORT, but we set defaults)
+# ─────────────────────────────────────────────────────────────────────────────────────
+# Always set to 'production' for Railway deployment
+NODE_ENV=production
+
+# Port allocation — Railway automatically injects PORT env var
+# Our Express server uses this or defaults to REG_SERVER_PORT
+PORT=
+
+# Express API server port (used if PORT is not set)
+# For Railway: Usually PORT is auto-assigned, but we set a default
+REG_SERVER_PORT=4001
+
+# ─────────────────────────────────────────────────────────────────────────────────────
+# SITE CONFIGURATION
+# ─────────────────────────────────────────────────────────────────────────────────────
+# Your production domain (MUST be accessible from the public internet)
+# Used for CORS, cookies, redirects, and public URLs
+# Example: https://capital-network.railway.app or https://yourdomain.com
+NEXT_PUBLIC_SITE_URL=https://your-railway-domain.railway.app
+
+# CORS allowed origins (comma-separated, optional)
+# If not set, defaults to NEXT_PUBLIC_SITE_URL
+# Add all domains that should access your API
+# CORS_ORIGINS=https://capital-network.railway.app
+
+# ─────────────────────────────────────────────────────────────────────────────────────
+# DATABASE CONNECTION (PostgreSQL)
+# ─────────────────────────────────────────────────────────────────────────────────────
+# Standard connection string from Railway PostgreSQL service
+# Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public&sslmode=require
+# Railway provides this automatically when you link a Postgres service.
+# Replace with actual Railway Postgres URL after creating the service.
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public&sslmode=require
+
+# Direct database connection (for Prisma migrations)
+# Use native PostgreSQL (not PgBouncer) to avoid pooling issues with migrations
+# When using connection pooling (PgBouncer), set this to a direct connection URL
+DIRECT_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public&sslmode=require
+
+# ─────────────────────────────────────────────────────────────────────────────────────
+# AUTHENTICATION & SECURITY SECRETS
+# ─────────────────────────────────────────────────────────────────────────────────────
+# CRITICAL: All secrets below MUST be strong, random, and unique.
+# Minimum 32 characters for all secret values.
+# Generated example: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+
+# NextAuth.js Secret (generate new for production)
+# Used by NextAuth for session encryption and CSRF protection
+NEXTAUTH_SECRET=GENERATE_UNIQUE_SECRET_MIN_32_CHARS
+
+# JWT Access Token Secret (generate new for production)
+# Used to sign short-lived access tokens for admin authentication (15m default)
+# If compromised, access is limited to 15 minutes
+JWT_ACCESS_SECRET=GENERATE_UNIQUE_SECRET_MIN_32_CHARS
+
+# JWT Refresh Token Secret (generate new for production)
+# Used to sign long-lived refresh tokens (7 days default)
+# Stored securely on client and database
+JWT_REFRESH_SECRET=GENERATE_UNIQUE_SECRET_MIN_32_CHARS
+
+# JWT Claims (optional, for token metadata)
+# Identifies your service in JWT tokens
+JWT_ISSUER=capital-network-api
+JWT_AUDIENCE=capital-network-web
+
+# ─────────────────────────────────────────────────────────────────────────────────────
+# ADMIN ACCOUNT (used only by Prisma seed on first deployment)
+# ─────────────────────────────────────────────────────────────────────────────────────
+# These are ONLY used during: npm run seed or prisma db seed
+# After first deployment, change password via admin panel.
+# NEVER reuse these values across environments.
+
+# Admin email (used for login)
+ADMIN_EMAIL=admin@yourdomain.com
+
+# Admin username (fallback, usually same as email)
+ADMIN_USERNAME=admin
+
+# Admin initial password (minimum 8 characters)
+# CRITICAL: Must be changed immediately after first login in production
+# Generate: openssl rand -base64 12
+# DO NOT reuse passwords across environments (dev, staging, production)
+ADMIN_PASSWORD=GENERATE_STRONG_PASSWORD_MIN_8_CHARS
+
+# Admin password salt (used for password hashing)
+# Generate: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+# Must be consistent for password verification across restarts
+ADMIN_PASSWORD_SALT=GENERATE_UNIQUE_SALT_MIN_32_CHARS
+
+# ─────────────────────────────────────────────────────────────────────────────────────
+# ADVANCED CONFIGURATION (Optional)
+# ─────────────────────────────────────────────────────────────────────────────────────
+
+# Legacy Socket.IO admin token (DISABLE in production if unused)
+# For development only; should NOT be set in production
+# If needed, generate: node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+# ADMIN_TOKEN=
+
+# API URL override (optional)
+# Only set if using a custom API domain/proxy
+# API_URL=
+
+# Serve Vite build from Express (recommended for production)
+# Set to true to serve static files from the same Node process
+SERVE_STATIC=true
+
+# ─────────────────────────────────────────────────────────────────────────────────────
+# FIREBASE CLOUD MESSAGING (Optional, only if using FCM)
+# ─────────────────────────────────────────────────────────────────────────────────────
+# Leave empty if not using Firebase for push notifications
+# FIREBASE_PROJECT_ID=
+# FIREBASE_CLIENT_EMAIL=
+# FIREBASE_PRIVATE_KEY=
+
+# ─────────────────────────────────────────────────────────────────────────────────────
+# SUPABASE (Optional, only if using Supabase)
+# ─────────────────────────────────────────────────────────────────────────────────────
+# Client-side keys (exposed via NEXT_PUBLIC_ prefix, safe to expose)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+
+# Server-only key (NEVER expose to browser)
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# ═════════════════════════════════════════════════════════════════════════════════════
+# DEPLOYMENT CHECKLIST
+# ═════════════════════════════════════════════════════════════════════════════════════
+# Before deploying to production, verify:
+#
+# ✓ All required secrets are set (no GENERATE_* or CHANGE_ME_* placeholders remain)
+# ✓ DATABASE_URL and DIRECT_URL point to the correct production database
+# ✓ NODE_ENV=production is set
+# ✓ NEXTAUTH_SECRET is at least 32 characters (cryptographically random)
+# ✓ JWT_ACCESS_SECRET is at least 32 characters (cryptographically random)
+# ✓ JWT_REFRESH_SECRET is at least 32 characters (cryptographically random)
+# ✓ ADMIN_PASSWORD is at least 8 characters and strong (will be changed after login)
+# ✓ ADMIN_PASSWORD_SALT is at least 32 characters (cryptographically random)
+# ✓ NEXT_PUBLIC_SITE_URL is set to your production domain
+# ✓ All secrets are unique and not reused from other environments
+# ✓ Health check endpoint responds: GET /api/health → {"ok":true}
+# ✓ Admin can login with ADMIN_EMAIL and ADMIN_PASSWORD
+# ✓ Database migrations have run successfully
+# ✓ No error messages in logs related to missing environment variables
+#
+# POST-DEPLOYMENT:
+# ✓ Change admin password via admin panel immediately
+# ✓ Review and rotate secrets according to security policy
+# ✓ Enable monitoring and alerting for secret access
+# ✓ Document secret rotation schedule
+# ✓ Archive this filled template in a secure location (password manager, vault)
+# ═════════════════════════════════════════════════════════════════════════════════════

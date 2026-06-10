@@ -16,7 +16,7 @@ const founderService = require('../services/founder.service')
 const { sendPushToAdmins } = require('../utils/firebase')
 const { saveUpload } = require('../utils/upload')
 const { setNoStore, normalizeString } = require('../utils/helpers')
-const XLSX = require('xlsx')
+const ExcelJS = require('exceljs')
 
 function getEmitters(req) {
   return {
@@ -48,12 +48,12 @@ async function version(_req, res) {
 
 async function ready(_req, res) {
   try {
-    const { testConnection } = require('../prisma/client')
-    const result = await testConnection()
+    const { probeDatabase } = require('../utils/db-probe')
+    const result = await probeDatabase(process.env.DATABASE_URL)
     if (result.ok) {
-      res.status(200).json({ ok: true, status: 'ready', checks: { database: 'up', latencyMs: result.latencyMs }, timestamp: new Date().toISOString() })
+      res.status(200).json({ ok: true, status: 'ready', checks: { database: 'up' }, timestamp: new Date().toISOString() })
     } else {
-      res.status(503).json({ ok: false, status: 'not_ready', checks: { database: 'down' }, error: 'database unavailable', timestamp: new Date().toISOString() })
+      res.status(503).json({ ok: false, status: 'not_ready', checks: { database: 'down' }, error: result.error || 'database unavailable', timestamp: new Date().toISOString() })
     }
   } catch (err) {
     res.status(503).json({ ok: false, status: 'not_ready', checks: { database: 'down' }, error: 'database unavailable', timestamp: new Date().toISOString() })
@@ -66,9 +66,9 @@ async function adminHealth(_req, res) {
 
 async function dbHealth(_req, res) {
   try {
-    const { testConnection } = require('../prisma/client')
-    const result = await testConnection()
-    if (result.ok) return res.json({ ok: true, latencyMs: result.latencyMs })
+    const { probeDatabase } = require('../utils/db-probe')
+    const result = await probeDatabase(process.env.DATABASE_URL)
+    if (result.ok) return res.json({ ok: true })
     return res.status(503).json({ ok: false, error: 'database_unreachable' })
   } catch (err) {
     return res.status(503).json({ ok: false, error: 'database_unreachable' })
@@ -312,10 +312,15 @@ async function exportEvaluationsExcel(req, res) {
     'آخرین بروزرسانی': normalizeString(row.updated_at),
   }))
 
-  const wb = XLSX.utils.book_new()
-  const ws = XLSX.utils.json_to_sheet(exportRows)
-  XLSX.utils.book_append_sheet(wb, ws, 'Evaluations')
-  const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet('Evaluations')
+
+  if (exportRows.length > 0) {
+    worksheet.columns = Object.keys(exportRows[0]).map((key) => ({ header: key, key, width: 32 }))
+  }
+
+  worksheet.addRows(exportRows)
+  const buffer = await workbook.xlsx.writeBuffer()
   const suffix = ids.length > 0 ? `selected-${ids.length}` : 'all'
   const fileName = `admin-evaluations-${suffix}-${new Date().toISOString().slice(0, 10)}.xlsx`
 

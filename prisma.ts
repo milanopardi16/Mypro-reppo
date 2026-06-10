@@ -6,6 +6,7 @@ declare global {
 }
 
 const client = global.__prismaClient || new PrismaClient({
+  adapter: 'postgresql',
   log: process.env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],
 })
 

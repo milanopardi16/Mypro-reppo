@@ -26,6 +26,8 @@ function createApp() {
   applySecurityMiddleware(app)
   app.use(express.json({ limit: '20mb' }))
   ensureUploadsDir()
+  // Lightweight container-friendly health endpoint (no middleware)
+  app.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }))
   
   // Protect uploads with authentication to prevent unauthorized access
   const { requireAdmin } = require('./middlewares/auth.middleware')

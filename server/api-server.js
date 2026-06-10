@@ -7,11 +7,19 @@ const { attachSocket } = require('./socket')
 const { ensureUploadsDir } = require('./utils/upload')
 const { disconnectDatabase, connectDatabase } = require('./prisma/client')
 
-validateEnv()
+let env = null
+try {
+  // validate but do not force process exit here; handle gracefully
+  env = validateEnv({ exitOnError: false })
+} catch (err) {
+  // validation failed — log and continue with process.env fallback
+  console.warn('Environment validation failed — continuing with process.env: ', err?.message)
+  env = Object.assign({}, process.env)
+}
 
 const app = createApp()
-const env = getEnv()
-const PORT = Number(env.REG_SERVER_PORT || env.PORT || 4001)
+// prefer REG_SERVER_PORT, then PORT, then default
+const PORT = Number(env.REG_SERVER_PORT || env.PORT || process.env.PORT || 4001)
 const httpServer = http.createServer(app)
 const startedAt = Date.now()
 
@@ -81,5 +89,23 @@ function gracefulShutdown(signal) {
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))
 process.on('SIGINT', () => gracefulShutdown('SIGINT'))
+
+process.on('unhandledRejection', (reason) => {
+  try {
+    logger && logger.error && logger.error('unhandled_rejection', { err: String(reason) })
+  } catch (_) {
+    console.error('unhandledRejection', reason)
+  }
+})
+
+process.on('uncaughtException', (err) => {
+  try {
+    logger && logger.error && logger.error('uncaught_exception', { err: err?.message })
+  } catch (_) {
+    console.error('uncaughtException', err)
+  }
+  // give a moment for logs to flush then exit
+  setTimeout(() => process.exit(1), 1000)
+})
 
 module.exports = { httpServer, startedAt }

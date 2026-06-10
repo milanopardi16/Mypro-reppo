@@ -53,7 +53,16 @@ function validateEnv(options = {}) {
 }
 
 function getEnv() {
-  if (!cached) return validateEnv({ exitOnError: true })
+  if (!cached) {
+    try {
+      cached = validateEnv({ exitOnError: false })
+    } catch (err) {
+      // Fall back to raw process.env to avoid crashing the process in production.
+      // Consumers should handle missing values gracefully.
+      console.warn('Environment validation failed — falling back to process.env:', err?.message)
+      return Object.assign({}, process.env)
+    }
+  }
   return cached
 }
 
