@@ -1,3 +1,33 @@
+# Railway Deployment Package
+
+**Location:** `deployment/railway/` — all deployment files are self-contained here.  
+**Main codebase:** unchanged — app runs from repository root.
+
+## Quick deploy
+
+| Step | Action |
+|------|--------|
+| 1 | Push repo to GitHub → see `GITHUB_SETUP.md` |
+| 2 | Railway → Deploy from GitHub |
+| 3 | Config file path: `/deployment/railway/railway.json` |
+| 4 | Add PostgreSQL + set variables from `env.template` |
+| 5 | Deploy → verify `GET /health` |
+
+**Persian guide:** `QUICK_START.md`  
+**File index:** `INDEX.md`  
+**Generate secrets:** `node deployment/railway/scripts/generate-secrets.mjs`
+
+## Config files
+
+| File | Use |
+|------|-----|
+| `railway.json` | Default — Nixpacks builder |
+| `railway-docker.json` | Optional — Docker builder |
+| `nixpacks.toml` | Node 22 build plan |
+| `Dockerfile` | Production Docker image |
+
+---
+
 # Railway Production Readiness Audit — Final Summary
 
 **Audit Date:** 2026-06-10  

@@ -1,0 +1,7 @@
+# Local Railway secrets — never commit
+.env
+.env.*
+!.env.template
+!env.template
+secrets/
+*.local

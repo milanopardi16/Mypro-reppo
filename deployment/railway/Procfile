@@ -1,0 +1,2 @@
+web: sh deployment/railway/scripts/railway-start.sh
+release: npx prisma migrate deploy

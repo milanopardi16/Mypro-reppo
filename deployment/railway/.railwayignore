@@ -1,0 +1,18 @@
+# Files excluded from Railway build context (when supported)
+.git
+.github
+node_modules
+dist
+.env
+.env.*
+!.env.example
+uploads
+DEPLOYMENT_STATIC_CPANEL
+deploy
+docs
+*.md
+!deployment/railway/*.md
+.vscode
+.idea
+coverage
+*.log
